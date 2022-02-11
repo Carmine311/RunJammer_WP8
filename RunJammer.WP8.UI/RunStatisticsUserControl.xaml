@@ -1,0 +1,223 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModel="clr-namespace:RunJammer.WP.ViewModel;assembly=RunJammer.WP.ViewModel"
+             xmlns:Converters="clr-namespace:RunJammer.WP.UI.Converters"
+             x:Class="RunJammer.WP.UI.RunStatisticsUserControl"
+             mc:Ignorable="d"
+             d:DesignHeight="239"
+             d:DesignWidth="480">
+
+    <UserControl.Resources>
+
+        <LinearGradientBrush x:Key="BlueHeaderGradient"
+                             EndPoint="1,0.5"
+                             MappingMode="RelativeToBoundingBox"
+                             StartPoint="0,0.5">
+            <GradientStop Color="#CE529AE2" />
+            <GradientStop Color="#CE529AE2"
+                          Offset="0.52" />
+            <GradientStop Color="#E5529AE2"
+                          Offset="0.68" />
+            <GradientStop Color="#7A529AE2"
+                          Offset="1" />
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="OrangeHeaderGradient"
+                             EndPoint="1,0.5"
+                             StartPoint="0,0.5">
+            <GradientStop Color="#CEF36E11"
+                          Offset="0" />
+            <GradientStop Color="#7AF36E11"
+                          Offset="1" />
+            <GradientStop Color="#CEF36E11"
+                          Offset="0.52" />
+            <GradientStop Color="#E5F36E11"
+                          Offset="0.68" />
+        </LinearGradientBrush>
+    </UserControl.Resources>
+    <UserControl.FontFamily>
+        <StaticResource ResourceKey="PhoneFontFamilyNormal" />
+    </UserControl.FontFamily>
+    <UserControl.FontSize>
+        <StaticResource ResourceKey="PhoneFontSizeNormal" />
+    </UserControl.FontSize>
+    <UserControl.Foreground>
+        <StaticResource ResourceKey="PhoneForegroundBrush" />
+    </UserControl.Foreground>
+
+    <Border BorderBrush="#FF818181"
+            d:DataContext="{d:DesignData /SampleData/RunSessionViewModelSampleData.xaml}">
+        <Border.Background>
+            <RadialGradientBrush>
+                <GradientStop Color="#FF5B5B5B"
+                              Offset="1" />
+                <GradientStop Color="WhiteSmoke" />
+            </RadialGradientBrush>
+        </Border.Background>
+        <!--<Border.Background>
+            <ImageBrush Stretch="Fill"
+                        ImageSource="/Images/carbonFiber2.jpg" />
+        </Border.Background>-->
+
+        <Grid x:Name="LayoutRoot">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.55*" />
+                <RowDefinition Height="0.45*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid x:Name="DistancePanel"
+                  Margin="6">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Border Style="{StaticResource PrimaryDisplayBorderStyle}"
+                        BorderThickness="0"
+                        Background="#FF298AEA">
+                    <Grid>
+                        <TextBlock TextWrapping="Wrap"
+                                   Text="distance"
+                                   FontFamily="Segoe WP SemiLight"
+                                   FontSize="26"
+                                   Foreground="White"
+                                   VerticalAlignment="Bottom" />
+                        <TextBlock Style="{StaticResource PhoneTextSmallStyle}"
+                                   FontFamily="Segoe WP Light"
+                                   Text="{Binding DistanceUnit}"
+                                   HorizontalAlignment="Right"
+                                   Margin="0"
+                                   VerticalAlignment="Bottom" />
+                    </Grid>
+                </Border>
+                <Border Background="#FFF1F1F1"
+                        Grid.Row="1">
+                    <TextBlock Text="{Binding TotalDistance, StringFormat=\{0:n2\}}"
+                               Style="{StaticResource PrimaryTextBlockDisplayStyle}"
+                               Foreground="Black"
+                               HorizontalAlignment="Left"
+                               Margin="0,0,6,0"
+                               VerticalAlignment="Center" />
+                </Border>
+            </Grid>
+            <Grid x:Name="SpeedPanel"
+                  Grid.Row="1"
+                  Margin="6">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Border Style="{StaticResource PrimaryDisplayBorderStyle}"
+                        BorderThickness="0"
+                        Background="#FF9EB9D6">
+                    <Grid>
+                        <TextBlock TextWrapping="Wrap"
+                                   Text="speed"
+                                   FontFamily="Segoe WP SemiLight"
+                                   FontSize="20"
+                                   Foreground="White" />
+                        <TextBlock Style="{StaticResource PhoneTextSmallStyle}"
+                                   Text="{Binding DistanceUnit, StringFormat=\{0\} / hour}"
+                                   VerticalAlignment="Bottom"
+                                   HorizontalAlignment="Right"
+                                   Margin="0" />
+                    </Grid>
+                </Border>
+                <Border Background="#FFF1F1F1"
+                        Grid.Row="1">
+                    <TextBlock Text="{Binding CurrentSpeed, StringFormat=\{0:n2\}}"
+                               Style="{StaticResource SecondaryDisplayTextBlockStyle}"
+                               FontSize="48"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               Margin="0,0,6,0" />
+                </Border>
+            </Grid>
+            <Grid x:Name="TimePanel"
+                  Grid.Column="1"
+                  Margin="6">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Border BorderBrush="#FFC7C7C7"
+                        Style="{StaticResource PrimaryDisplayBorderStyle}"
+                        Background="#FFEE7F31">
+                    <Grid>
+                        <TextBlock TextWrapping="Wrap"
+                                   Text="time"
+                                   FontFamily="Segoe WP SemiLight"
+                                   FontSize="26"
+                                   Foreground="White" />
+                        <TextBlock HorizontalAlignment="Right"
+                                   TextWrapping="Wrap"
+                                   Text="h:mm:ss"
+                                   VerticalAlignment="Bottom"
+                                   Style="{StaticResource PhoneTextSmallStyle}"
+                                   Margin="12,0,0,0" />
+                    </Grid>
+                </Border>
+                <Border Background="#FFF1F1F1"
+                        Grid.Row="1">
+                    <TextBlock Text="{Binding ElapsedTime, StringFormat=\{0:h\\:mm\\:ss\}}"
+                               Style="{StaticResource PrimaryTextBlockDisplayStyle}"
+                               Foreground="Black"
+                               HorizontalAlignment="Left"
+                               Margin="0,0,6,0"
+                               VerticalAlignment="Center" />
+                </Border>
+            </Grid>
+            <Grid x:Name="PacePanel"
+                  Grid.Row="1"
+                  Grid.Column="1"
+                  Margin="6">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Border Style="{StaticResource PrimaryDisplayBorderStyle}"
+                        BorderThickness="0">
+                    <Border.Background>
+                        <LinearGradientBrush EndPoint="1,0.5"
+                                             StartPoint="0,0.5">
+                            <GradientStop Color="#CEFFBE90"
+                                          Offset="0" />
+                            <GradientStop Color="#CEFFBE90"
+                                          Offset="1" />
+                            <GradientStop Color="#CEFFBE90"
+                                          Offset="0.52" />
+                            <GradientStop Color="#CEFFBE90"
+                                          Offset="0.68" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Grid>
+                        <TextBlock TextWrapping="Wrap"
+                                   Text="pace"
+                                   FontFamily="Segoe WP SemiLight"
+                                   FontSize="20"
+                                   Foreground="White" />
+                        <TextBlock Style="{StaticResource PhoneTextSmallStyle}"
+                                   Text="{Binding DistanceUnit, StringFormat=min / \{0\}}"
+                                   VerticalAlignment="Bottom"
+                                   HorizontalAlignment="Right"
+                                   Margin="0" />
+                    </Grid>
+                </Border>
+                <Border Background="#FFF1F1F1"
+                        Grid.Row="1">
+                    <TextBlock Text="{Binding Pace, StringFormat=\{0:mm\\:ss\}}"
+                               Style="{StaticResource PhoneTextTitle2Style}"
+                               Foreground="Black"
+                               VerticalAlignment="Center"
+                               FontSize="48"
+                               HorizontalAlignment="Left"
+                               Margin="12,0,6,0" />
+                </Border>
+            </Grid>
+
+        </Grid>
+    </Border>
+</UserControl>

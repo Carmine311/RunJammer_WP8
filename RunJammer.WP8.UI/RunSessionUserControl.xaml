@@ -1,0 +1,167 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:RunJammer.WP.UI"
+             xmlns:maps="clr-namespace:Microsoft.Phone.Maps.Controls;assembly=Microsoft.Phone.Maps"
+             xmlns:toolkit="clr-namespace:Microsoft.Phone.Maps.Toolkit;assembly=Microsoft.Phone.Controls.Toolkit"
+             xmlns:viewModel="clr-namespace:RunJammer.WP.ViewModel;assembly=RunJammer.WP.ViewModel"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:toolkit1="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:eim="clr-namespace:Microsoft.Expression.Interactivity.Media;assembly=Microsoft.Expression.Interactions"
+             xmlns:ec="clr-namespace:Microsoft.Expression.Interactivity.Core;assembly=Microsoft.Expression.Interactions"
+             xmlns:controls="clr-namespace:RunJammer.WP.UI.Controls"
+             xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+             x:Class="RunJammer.WP.UI.RunSessionUserControl"
+             mc:Ignorable="d"
+             FontFamily="{StaticResource PhoneFontFamilyNormal}"
+             FontSize="{StaticResource PhoneFontSizeNormal}"
+             Foreground="{StaticResource PhoneForegroundBrush}"
+             d:DesignHeight="800"
+             d:DesignWidth="456">
+    <Grid x:Name="LayoutRoot">
+        <VisualStateManager.CustomVisualStateManager>
+            <ec:ExtendedVisualStateManager />
+        </VisualStateManager.CustomVisualStateManager>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroup">
+                <VisualState x:Name="LocationServicesDisabled">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)"
+                                                       Storyboard.TargetName="grid">
+                            <DiscreteObjectKeyFrame KeyTime="0">
+                                <DiscreteObjectKeyFrame.Value>
+                                    <Visibility>Visible</Visibility>
+                                </DiscreteObjectKeyFrame.Value>
+                            </DiscreteObjectKeyFrame>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Default" />
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+
+        <Grid x:Name="RunSessionInfo">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid x:Name="RunSessionHeader">
+                <i:Interaction.Triggers>
+                    <ec:PropertyChangedTrigger Binding="{Binding IsLocationDisabled}">
+                        <i:Interaction.Behaviors>
+                            <ec:ConditionBehavior>
+                                <ec:ConditionalExpression>
+                                    <ec:ComparisonCondition LeftOperand="{Binding IsLocationDisabled}"
+                                                            RightOperand="True" />
+                                </ec:ConditionalExpression>
+                            </ec:ConditionBehavior>
+                        </i:Interaction.Behaviors>
+                        <ec:GoToStateAction StateName="LocationServicesDisabled"
+                                            UseTransitions="False" />
+                    </ec:PropertyChangedTrigger>
+                </i:Interaction.Triggers>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Button Content="Start"
+                        IsEnabled="{Binding CanStartRunSession}"
+                        Command="{Binding StartRunSessionCommand}"
+                        Background="#FF6AB66A"
+                        FontFamily="Segoe WP SemiLight" />
+                <Button Grid.Column="1"
+                        IsEnabled="{Binding CanStartRunSession, Converter={StaticResource InverseBooleanConverter}}"
+                        Content="End"
+                        Command="{Binding EndRunSessionCommand}"
+                        Background="Red"
+                        FontFamily="Segoe WP SemiLight">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ec:NavigateToPageAction TargetPage="/Pages/RunSessionBreakDownPage.xaml" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+                <Grid x:Name="grid"
+                      Grid.ColumnSpan="2"
+                      Background="#FFEE0000"
+                      Visibility="Collapsed">
+                    <TextBlock HorizontalAlignment="Left"
+                               TextWrapping="Wrap"
+                               Text="Location Services are disabled. Please enable Location in the Settings menu of your phone"
+                               VerticalAlignment="Center"
+                               FontFamily="Segoe WP SemiLight"
+                               FontSize="21.333"
+                               Margin="6,0,0,0" />
+                </Grid>
+
+            </Grid>
+            <controls:RunStatisticsControl Grid.Row="1"
+                                           ElapsedTime="{Binding ElapsedTime, StringFormat=\{0:h\\:mm\\:ss\}}"
+                                           Distance="{Binding TotalDistance, StringFormat=\{0:n3\}}"
+                                           DistanceHeaderBrush="#FF298AEA"
+                                           SpeedHeaderBrush="#FF9EB9D6"
+                                           SecondaryLabelSize="48"
+                                           ElapsedTimeHeaderBrush="#FFEE7F31"
+                                           DistanceUnit="{Binding DistanceUnit, FallbackValue=Miles}"
+                                           Pace="{Binding Pace, StringFormat=\{0:h\\:mm\\:ss\}}"
+                                           Speed="{Binding CurrentSpeed, StringFormat=\{0:n3\}}" />
+            <!--<local:RunStatisticsUserControl Grid.Row="1"
+			BorderBrush="Black" />-->
+
+        </Grid>
+
+        <phone:Pivot Grid.Row="2"
+                     HeaderTemplate="{StaticResource RunSessionPivotHeaderTemplate}"
+                     Style="{StaticResource RunSessionContentPivotStyle}">
+            <phone:PivotItem Header="music"
+                             Margin="0">
+                <local:RunJammerJukeBoxUserControl />
+            </phone:PivotItem>
+            <phone:PivotItem Header="map"
+                             Margin="0">
+                <controls:RunSessionMapUserControl CurrentLocation="{Binding CurrentLocation}"
+                                                   Heading="{Binding Heading}"
+                                                   RunSessionWaypoints="{Binding Waypoints}"
+                                                   RouteLocations="{Binding RouteLocations}" />
+                <!--<maps:Map x:Name="RouteMap"
+                          Center="{Binding CurrentLocation}"
+                      TransformCenter="0.5, 0.5"
+                      ZoomLevel="17">
+                <maps:Map.MapElements>
+                    <maps:MapPolyline x:Name="MapRoute" Path="{Binding RouteLocations}"
+                                      StrokeThickness="3"
+                                      StrokeColor="{StaticResource PhoneAccentColor}" />
+                </maps:Map.MapElements>
+            </maps:Map>-->
+            </phone:PivotItem>
+            <phone:PivotItem Header="splits">
+                <phone:Pivot Style="{StaticResource RunSessionContentPivotStyle}">
+                    <phone:PivotItem Header="{Binding DistanceUnit}">
+                        <ListBox ItemsSource="{Binding SplitsViewModel.DistanceUnitSplits}"
+                                 ItemTemplate="{StaticResource SplitsDataTemplate}" />
+                    </phone:PivotItem>
+                    <phone:PivotItem Header="5k">
+                        <ListBox ItemsSource="{Binding SplitsViewModel.FiveKSplits}"
+                                 ItemTemplate="{StaticResource SplitsDataTemplate}" />
+                    </phone:PivotItem>
+                    <phone:PivotItem Header="10k">
+                        <ListBox ItemsSource="{Binding SplitsViewModel.TenKSplits}"
+                                 ItemTemplate="{StaticResource SplitsDataTemplate}" />
+                    </phone:PivotItem>
+                </phone:Pivot>
+
+            </phone:PivotItem>
+
+
+        </phone:Pivot>
+
+    </Grid>
+</UserControl>

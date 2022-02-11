@@ -1,0 +1,11 @@
+﻿<ResourceDictionary
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<!-- Resource dictionary entries should be defined here. -->
+	<Color x:Key="1RunRatingColor">#FF298AEA</Color>
+	<SolidColorBrush x:Key="1RunRatingBrush"
+					 Color="{StaticResource 1RunRatingColor}" />
+	<Color x:Key="2RunRatingColor">#FF6AB66A</Color>
+	<SolidColorBrush x:Key="2RunRatingBrush"
+					 Color="{StaticResource 2RunRatingColor}" />
+</ResourceDictionary>
